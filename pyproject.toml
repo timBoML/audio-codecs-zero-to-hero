@@ -1,0 +1,36 @@
+[project]
+name = "audio-ml-zero-to-hero"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets>=4.8.4",
+    "ipywidgets>=8.1.8",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.3",
+    "python-dotenv>=1.2.2",
+    "scikit-learn>=1.8.0",
+    "torch==2.10.0",
+    "torchaudio==2.10.0",
+    "torchcodec==0.10.0",
+]
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
+]
+torchvision = [
+  { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
+]
+torchaudio = [
+  { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
+]
+torchao = [
+  { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true

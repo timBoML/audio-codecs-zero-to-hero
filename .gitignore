@@ -1,3 +1,6 @@
+*.pt
+.env
+*.wav
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
