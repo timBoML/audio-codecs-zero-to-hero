@@ -4,18 +4,12 @@ A deep dive into the current state of audio machine learning - from zero to hero
 Hi! I am an AI Engineer working a lot with audio-based models and want to go more deeply into the field, instead of just scratching the surface.
 
 ## Timeline:
-### 29.03.2026
-Today I worked through the blog https://kyutai.org/codec-explainer and let Sonnet 4.6 make me some homework programming tasks. 
 
-I had prior understanding of codebooks, but implementing the different RVQ levels from scratch and plotting them made it really click how longer codebooks work. RVQ gives me the vibe of different levels of differentiation going from distance → velocity → acceleration (dx/dt), like always going one level deeper of information.
+### 04.04.2026 - 05.04.2026 
 
-Started implementing a model based on EnCodec by reading the paper https://arxiv.org/pdf/2210.13438. 
+I knew about the good Codec from Neuphonic so I read their paper https://arxiv.org/pdf/2509.09550 and replaced my RVQ with Finite Scalar Quantization.
 
-### 30.03.2026
-Implemented Decoder, RVQ, and loss function -> next task: training loop
-
-### 31.03.2026 - 02.04.2026
-Implemented some of the loss functions, not all, and trained on the Gemini speech dataset. Very bad results — loss wasn't going down. Reconstruction doesn't work at all.
+removed entropy loss because it wasnt working
 
 ### 03.04.2026
 
@@ -27,3 +21,15 @@ I added something similar to EMA to replace dead codebooks and added entropy los
 
 ITS LEARNING YES
 
+### 31.03.2026 - 02.04.2026
+Implemented some of the loss functions, not all, and trained on the Gemini speech dataset. Very bad results, loss wasn't going down. Reconstruction doesn't work at all.
+
+### 30.03.2026
+Implemented Decoder, RVQ, and loss function -> next task: training loop
+
+### 29.03.2026
+Today I worked through the blog https://kyutai.org/codec-explainer and let Sonnet 4.6 make me some homework programming tasks. 
+
+I had prior understanding of codebooks, but implementing the different RVQ levels from scratch and plotting them made it really click how longer codebooks work. RVQ gives me the vibe of different levels of differentiation going from distance → velocity → acceleration (dx/dt), like always going one level deeper of information.
+
+Started implementing a model based on EnCodec by reading the paper https://arxiv.org/pdf/2210.13438. 

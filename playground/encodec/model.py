@@ -105,7 +105,6 @@ class VectorQuantizer(nn.Module):
         self.dim = dim
         self.last_indices = None
         self.n_codes_tensor = torch.arange(n_codes)
-        self.max_entropy = torch.log(torch.tensor(self.n_codes, dtype=torch.float32))
 
     def forward(self, z):
         z_flatten = torch.flatten(z, start_dim=0, end_dim=1)
@@ -131,11 +130,7 @@ class VectorQuantizer(nn.Module):
         commitment_loss = torch.mean((z_quantized.detach() - z_flatten) ** 2)
         z_quantized_st = z_quantized_st.reshape(z.shape)
 
-        usage = torch.bincount(indices, minlength=self.n_codes).float()
-        probs = usage / usage.sum()
-        entropy = -(probs * torch.log(probs + 1e-10)).sum()
-        entropy_loss = self.max_entropy - entropy
-        return z_quantized_st, indices, commitment_loss, entropy_loss
+        return z_quantized_st, indices, commitment_loss
 
 
 class RVQ(nn.Module):
@@ -146,18 +141,15 @@ class RVQ(nn.Module):
     def forward(self, z):
         residual = z
         total_loss = torch.zeros(1, device=z.device, dtype=torch.float32).squeeze()
-        total_entropy_loss = torch.zeros(1, device=z.device, dtype=torch.float32).squeeze()
         total_quantized = torch.zeros_like(z)
         all_indices = []
         for quantizer in self.quantizers:
-            z_q, indices, loss, entropy_loss = quantizer(residual)
+            z_q, indices, loss= quantizer(residual)
             residual = residual - z_q
             total_loss += loss
-            total_entropy_loss += entropy_loss
             total_quantized += z_q
             all_indices.append(indices)
-        return total_quantized, total_loss / len(self.quantizers), total_entropy_loss / len(self.quantizers), all_indices
-
+        return total_quantized, total_loss / len(self.quantizers), all_indices
 
 class SimpleCodec(nn.Module):
     def __init__(self):
@@ -169,11 +161,10 @@ class SimpleCodec(nn.Module):
     def forward(self, x):
         z = self.encoder(x)
         z = z.permute(0, 2, 1)
-        z, commitment_loss, entropy_loss, indices = self.rvq(z)
+        z, commitment_loss, indices = self.rvq(z)
         z = z.permute(0, 2, 1)
         x_hat = self.decoder(z)
-        return x_hat, commitment_loss, entropy_loss
-
+        return x_hat, commitment_loss
 
 def frequency_loss_fn(x, x_hat):
     total_loss_l1 = torch.tensor(0.0).to(x.device)
