@@ -5,6 +5,10 @@ Hi! I am an AI Engineer working a lot with audio-based models and want to go mor
 
 ## Timeline:
 
+### 06.04.2026
+
+Took inspiration from Neucodec
+
 ### 04.04.2026 - 05.04.2026 
 
 I knew about the good Codec from Neuphonic so I read their paper https://arxiv.org/pdf/2509.09550 and replaced my RVQ with Finite Scalar Quantization.

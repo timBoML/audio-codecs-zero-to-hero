@@ -1,14 +1,16 @@
 import torch
 import torch.nn as nn
 import torchaudio
-
+import torch.nn.functional as F
 
 class ResidualUnit(nn.Module):
     def __init__(self, channels):
         super().__init__()
         self.conv = nn.Sequential(
                 nn.Conv1d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1),
-                nn.Conv1d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1)
+                nn.ELU(),
+                nn.Conv1d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1),
+                nn.ELU(),
         )
 
     def forward(self, x):
@@ -31,6 +33,7 @@ class DownsampleBlock(nn.Module):
     def forward(self, x):
         x = self.residual_unit(x)
         x = self.conv1d(x)
+        x = F.elu(x)
         return x
 
 
@@ -71,6 +74,7 @@ class UpsampleBlock(nn.Module):
 
     def forward(self, x):
         x = self.conv1d_transposed(x)
+        x = F.elu(x)
         x = self.residual_unit(x)
         return x
 
